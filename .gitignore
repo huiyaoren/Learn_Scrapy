@@ -180,3 +180,4 @@
 /venv/tcl/tk8.5/msgs/*.msg
 /venv/tcl/tk8.5/*
 /venv/tcl/tk8.5/ttk/*.tcl
+/venv
