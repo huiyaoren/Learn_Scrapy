@@ -13,7 +13,7 @@ class TurorialItem(scrapy.Item):
     # name = scrapy.Field()
     pass
 
-class DomzItem(scrapy.Item):
+class DmozItem(scrapy.Item):
     title = scrapy.Field()
     link = scrapy.Field()
     desc = scrapy.Field()
