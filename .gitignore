@@ -181,3 +181,9 @@
 /venv/tcl/tk8.5/*
 /venv/tcl/tk8.5/ttk/*.tcl
 /venv
+/.idea
+/lativ/lativ/*.pyc
+/dirbot/*.json
+/turorial/turorial/*.pyc
+*.pyc
+*.json
