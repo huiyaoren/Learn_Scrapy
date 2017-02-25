@@ -11,6 +11,10 @@ import scrapy
 class LativItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+
+    name = scrapy.Field()
+    lowest_price = scrapy.Field()
+    current_price = scrapy.Field()
     content = scrapy.Field()
-    
+
     pass
