@@ -183,3 +183,9 @@
 /venv
 /turorial/turorial/*.pyc
 /turorial/turorial/spiders/*.pyc
+/.idea
+/lativ/lativ/*.pyc
+/dirbot/*.json
+/turorial/turorial/*.pyc
+*.pyc
+*.json
