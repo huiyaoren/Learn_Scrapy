@@ -181,3 +181,5 @@
 /venv/tcl/tk8.5/*
 /venv/tcl/tk8.5/ttk/*.tcl
 /venv
+/turorial/turorial/*.pyc
+/turorial/turorial/spiders/*.pyc
