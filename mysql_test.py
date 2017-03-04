@@ -9,12 +9,8 @@ def test_1():
 
     # result = db.execute("DROP TABLE IF EXISTS beston.bt_transfer")
     # result = db.execute("CREATE TABLE beston.bt_transfer(transfer_id INT)")
-    #
     # result = db.execute(text("ALTER TABLE beston.bt_transfer ADD transfer_order_id INT NULL"))
-
-
     # result = db.execute(text("select * from bt_transfer"))
-
     # result = db.execute(text("select * from bt_transfer where transfer_order_id = :id"), {'id': 345})
 
     # 指定返回数据的数据类型
@@ -46,12 +42,16 @@ class Transfer(Base):
     # 表名
     __tablename__ = 'bt_transfer'
 
+    __table_args__ = {
+        'mysql_engine': 'MyISAM',
+        'mysql_charset': 'utf8'
+    }
+
     # 表结构
     transfer_id = Column(Integer, primary_key=True)
     transfer_order_id = Column(Integer)
     transfer_content = Column(String(255))
     transfer_order_status = Column()
-
 
     # def __int__(self, id, name):
     #     self.id = id
@@ -64,7 +64,6 @@ def test_2():
     engine = create_engine('mysql+pymysql://root:12345678@localhost:3306/beston')
     # 创建 DBSession 类型
     DBSession = sessionmaker(bind=engine)
-
 
     # 创建 session 对象
     session = DBSession()
@@ -84,5 +83,20 @@ def test_2():
     print('type', type(Transfer))
     print('content', transfer.transfer_content)
     session.close()
+
+
+
+engine = create_engine("mysql+pymysql://root:12345678@localhost/beston")
+DBSession = sessionmaker(bind=engine)
+
+session = DBSession()
+result = session.execute('select * from bt_transfer')
+
+print(result.fetchall())
+
+
+
+
+
 
 
