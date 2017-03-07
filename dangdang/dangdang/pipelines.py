@@ -5,7 +5,6 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from scrapy.exceptions import DropItem
-
 from .model.config import DBSession
 from .model.transfer import Transfer
 
@@ -18,7 +17,6 @@ class DangdangPipeline(object):
         self.session.execute('SET character_set_connection=utf8;')
 
     def process_item(self, item, spider):
-
         if 0:
             raise DropItem("跳过已完成订单")
         else:
@@ -29,8 +27,6 @@ class DangdangPipeline(object):
             self.session.merge(a)
             self.session.commit()
             return item
-
-
 
     def close_spider(self, spider):
         self.session.close()

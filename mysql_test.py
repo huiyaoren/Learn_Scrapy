@@ -1,4 +1,6 @@
 # coding: utf8
+
+from scrapy import FormRequest
 from sqlalchemy import create_engine, text, Column, Integer, String, Unicode, or_, not_, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -57,7 +59,7 @@ class Transfer(Base):
     }
 
     # 表结构
-    transfer_id = Column(Integer, primary_key=True)
+    transfer_id = Column(Integer, primary_key=True, autoincrement=True)
     transfer_order_id = Column(Integer)
     transfer_content = Column(String(255))
     transfer_order_status = Column()
@@ -224,7 +226,6 @@ def delete_in():
 
 
 
-test()
 class ModelMixin(object):
     @classmethod
     def get_by_id(cls, session, id, columns=None, lock_mode=None):
@@ -307,6 +308,15 @@ class Base(Base):
         'mysql_engine': 'InnoDB',
         'mysql_charset': 'utf8'
     }
+
+def test(response):
+    print response
+
+request_1 = FormRequest("http://pubs.rsc.org/en/search/journalresult",
+                            formdata={'resultcount': '100', 'category': 'all', 'pageno': '1'},
+                            callback=test)
+
+print request_1
 
 
 
