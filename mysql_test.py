@@ -1,6 +1,8 @@
 # coding: utf8
 
 from scrapy import FormRequest
+from sqlalchemy import MetaData
+from sqlalchemy import Table
 from sqlalchemy import create_engine, text, Column, Integer, String, Unicode, or_, not_, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -312,11 +314,10 @@ class Base(Base):
 def test(response):
     print response
 
-request_1 = FormRequest("http://pubs.rsc.org/en/search/journalresult",
-                            formdata={'resultcount': '100', 'category': 'all', 'pageno': '1'},
-                            callback=test)
-
-print request_1
+# request_1 = FormRequest("http://pubs.rsc.org/en/search/journalresult",
+#                             formdata={'resultcount': '100', 'category': 'all', 'pageno': '1'},
+#                             callback=test)
+# print request_1
 
 
 

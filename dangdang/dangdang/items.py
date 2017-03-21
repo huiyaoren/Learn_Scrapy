@@ -36,3 +36,11 @@ class BookItem(scrapy.Item):
     book_page_url      = scrapy.Field()
     book_disable       = scrapy.Field()
     book_keywords      = scrapy.Field()
+
+
+class AreaItem(scrapy.Item):
+
+    region_area_number = scrapy.Field()
+    region_name = scrapy.Field()
+    region_id = scrapy.Field()
+

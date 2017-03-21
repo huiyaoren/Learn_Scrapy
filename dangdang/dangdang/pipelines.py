@@ -6,6 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 from scrapy.exceptions import DropItem
 from .model.config import DBSession
+from .model.config import session
 from .model.transfer import Transfer
 
 
@@ -30,3 +31,23 @@ class DangdangPipeline(object):
 
     def close_spider(self, spider):
         self.session.close()
+
+# class AreaPipeline(object):
+#     def open_spider(self, spider):
+#         self.session = session
+#
+#
+#     def process_item(self, item, spider):
+#         if 0:
+#             raise DropItem("跳过已完成订单")
+#         else:
+#             a = Transfer(
+#                 transfer_order_id = item['session_online_id'],
+#                 transfer_content = item['session_name'].encode('utf8')
+#             )
+#             self.session.merge(a)
+#             self.session.commit()
+#             return item
+#
+#     def close_spider(self, spider):
+#         self.session.close()

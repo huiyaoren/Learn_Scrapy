@@ -1,10 +1,15 @@
 # coding: utf8
+from __future__ import unicode_literals
 import json
+from urllib import urlencode
 
 import scrapy
-from dangdang.items import BookItem, SessionItem
 from scrapy import FormRequest
 from scrapy import Request
+
+from dangdang.items import AreaItem, BookItem, SessionItem
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
 class DangdangSpider(scrapy.Spider):
@@ -44,9 +49,10 @@ class DangdangSpider(scrapy.Spider):
             yield item
 
 
+# ajax
 class TestSpider(scrapy.Spider):
 
-    name = 'test'
+    name = "test"
 
     def start_requests(self):
         return [FormRequest("http://localhost/bsdapp/api/user/register_post",
@@ -89,3 +95,50 @@ class TestSpider(scrapy.Spider):
         print("++++++++++++++++++++++++++++++++++++++")
 
 
+
+class AreaSpider(scrapy.Spider):
+    name = 'area'
+
+    region_id = 0
+
+
+    def start_requests(self):
+        engine_1 = create_engine("mysql+pymysql://root:root@122.114.45.160/signin")
+        AreaSession = sessionmaker(bind=engine_1)
+        session = AreaSession()
+        session.execute('SET NAMES utf8;')
+        session.execute('SET CHARACTER SET utf8;')
+        session.execute('SET character_set_connection=utf8;')
+        results = session.execute('select region_id, region_name from si_region where TRUE ')
+
+        for r in results.fetchall()[0:10]:
+            self.region_id = r.region_id
+            d = {
+                'action': 'area2zone',
+                'area': r.region_name.decode('utf8').encode('gbk')
+                # 'area': r.region_name.encode('gb2312')
+            }
+            url = 'http://www.ip138.com/post/search.asp?' + urlencode(d)
+            # yield self.make_requests_from_url('http://www.ip138.com/post/search.asp?area=%B8%A3%D6%DD&action=area2zone')
+            yield self.make_requests_from_url(url)
+
+
+
+    def parse(self, response):
+        item = AreaItem()
+        try:
+            item['region_area_number'] =  response.css('td.tdc2::text').extract()[1].strip().split(u' 区号：')[1]
+            # item['region_name'] =  response.css('td.tdc2::text').extract()[1].strip().split(u'◎ ')[1]
+        except:
+            item['region_area_number'] =  " "
+        item['region_id'] = self.region_id
+        return item
+        # i = 0
+        # for sel in response.css('td.tdc2'):
+        #     if(i == 0):
+        #         continue
+        #     # print(sel)
+        #     item['region_name'] = sel.css('td').extract_first().strip()
+        #     print(item['region_name'])
+        #     i += 1
+        #     yield item
