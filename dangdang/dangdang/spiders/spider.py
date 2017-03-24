@@ -35,6 +35,7 @@ class DangdangSpider(scrapy.Spider):
         #     pages.append(page)
         # return pages
 
+
     def parse(self, response):
         item = SessionItem()
         for sel in response.css('ul.list_aa > li > a'):
@@ -45,7 +46,6 @@ class DangdangSpider(scrapy.Spider):
             item['session_name'] = sel.css('a::attr(title)').extract_first().strip()
             # item['session_rest_day'] = sel.css('.sale_time > span > span > span::text').extract_first().strip()
             item['session_online_id'] = int(item['session_url'].split('_')[-2])
-
             yield item
 
 
@@ -70,7 +70,6 @@ class TestSpider(scrapy.Spider):
         #                 method='POST',
         #                 body="user_name='beston3'&user_password='123123'&user_sex='男'&user_age=1&user_phone=11131311121&user_mail='ws23@26.com'",
         #                 )]
-
 
 
     def parse(self, response):
@@ -99,46 +98,63 @@ class TestSpider(scrapy.Spider):
 class AreaSpider(scrapy.Spider):
     name = 'area'
 
-    region_id = 0
-
 
     def start_requests(self):
+        # self.area_to_code()
+        # self.code_to_area()
+        for r in xrange(1, 99):
+            code = str(r).zfill(4)
+            d = {
+                'action': 'zone2area',
+                'zone': code
+            }
+            url = 'http://www.ip138.com/post/search.asp?' + urlencode(d)
+            # print url
+            # yield self.make_requests_from_url('http://www.ip138.com/post/search.asp?zone=0591&action=zone2area')
+            yield self.make_requests_from_url(url)
+
+    def area_to_code(self):
         engine_1 = create_engine("mysql+pymysql://root:root@122.114.45.160/signin")
         AreaSession = sessionmaker(bind=engine_1)
-        session = AreaSession()
-        session.execute('SET NAMES utf8;')
-        session.execute('SET CHARACTER SET utf8;')
-        session.execute('SET character_set_connection=utf8;')
-        results = session.execute('select region_id, region_name from si_region where TRUE ')
+        self.session = AreaSession()
+        self.session.execute('SET NAMES utf8;')
+        self.session.execute('SET CHARACTER SET utf8;')
+        self.session.execute('SET character_set_connection=utf8;')
+        results = self.session.execute('select region_id, region_name from si_region where TRUE ')
 
         for r in results.fetchall()[0:10]:
-            self.region_id = r.region_id
             d = {
                 'action': 'area2zone',
                 'area': r.region_name.decode('utf8').encode('gbk')
-                # 'area': r.region_name.encode('gb2312')
             }
             url = 'http://www.ip138.com/post/search.asp?' + urlencode(d)
             # yield self.make_requests_from_url('http://www.ip138.com/post/search.asp?area=%B8%A3%D6%DD&action=area2zone')
+            yield self.make_requests_from_url(url)
+
+    def code_to_area(self):
+        for r in xrange(0, 10):
+            code = str(r).zfill(4)
+            d = {
+                'action': 'zone2area',
+                'zone': code
+            }
+            url = 'http://www.ip138.com/post/search.asp?' + urlencode(d)
+            # print url
+            # yield self.make_requests_from_url('http://www.ip138.com/post/search.asp?zone=0591&action=zone2area')
             yield self.make_requests_from_url(url)
 
 
 
     def parse(self, response):
         item = AreaItem()
+
         try:
             item['region_area_number'] =  response.css('td.tdc2::text').extract()[1].strip().split(u' 区号：')[1]
+            item['region_name'] = response.css('td.tdc2::text').extract()[1].strip().split(u' ')[2]
+
             # item['region_name'] =  response.css('td.tdc2::text').extract()[1].strip().split(u'◎ ')[1]
         except:
-            item['region_area_number'] =  " "
-        item['region_id'] = self.region_id
+            # item['region_area_number'] =  " "
+            pass
         return item
-        # i = 0
-        # for sel in response.css('td.tdc2'):
-        #     if(i == 0):
-        #         continue
-        #     # print(sel)
-        #     item['region_name'] = sel.css('td').extract_first().strip()
-        #     print(item['region_name'])
-        #     i += 1
-        #     yield item
+

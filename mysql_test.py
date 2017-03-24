@@ -314,15 +314,5 @@ class Base(Base):
 def test(response):
     print response
 
-# request_1 = FormRequest("http://pubs.rsc.org/en/search/journalresult",
-#                             formdata={'resultcount': '100', 'category': 'all', 'pageno': '1'},
-#                             callback=test)
-# print request_1
-
-
-
-
-
-
 
 
