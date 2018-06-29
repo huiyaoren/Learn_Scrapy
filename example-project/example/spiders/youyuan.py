@@ -25,7 +25,7 @@ class YouyuanSpider(CrawlSpider):
 
     # 处理列表页，其实完全不用的，就是留个函数debug方便
     def parse_list_page(self, response):
-        print "Processed  list %s" % (response.url,)
+        print("Processed  list %s" % (response.url,))
         #print response.body
         self.profile_page_lx.extract_links(response)
 
@@ -33,7 +33,7 @@ class YouyuanSpider(CrawlSpider):
 
     # 处理Profile资料页，得到我们要的Profile
     def parse_profile_page(self, response):
-        print "Processing profile %s" % response.url
+        print("Processing profile %s" % response.url)
 
         profile = Profile()
         profile['header_url'] = self.get_header_url(response)

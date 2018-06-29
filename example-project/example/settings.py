@@ -28,7 +28,8 @@ LOG_LEVEL = 'DEBUG'
 # crawl.
 DOWNLOAD_DELAY = 1
 
-REDIS_URL = 'redis://root:root@192.168.1.211:6379'
+# REDIS_URL = 'redis://root:root@192.168.1.211:6379'
+REDIS_URL = 'redis://root:root@localhost:6379'
 REDIS_PASSWORD = 'root'
 DEFAULT_REQUEST_HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
